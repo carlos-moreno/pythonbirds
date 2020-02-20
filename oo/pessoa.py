@@ -16,3 +16,11 @@ if __name__ == "__main__":
     print(id(carlos))
     for children in carlos.filhos:
         print(f'{id(children)}: {children.nome}')
+
+    carlos.sobrenome = 'Moreno'
+    print(carlos.sobrenome)
+    print(carlos.__dict__)
+    print(isabella.__dict__)
+    print(luiz.__dict__)
+    del carlos.sobrenome
+    print(carlos.__dict__)
