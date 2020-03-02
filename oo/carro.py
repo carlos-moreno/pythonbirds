@@ -120,10 +120,3 @@ Exemplo:
 
     def girar_a_esquerda(self):
         return self.direcao.girar_a_esquerda()
-
-
-if __name__ == "__main__":
-    direcao = Direcao()
-    motor = Motor()
-    c = Carro(direcao, motor)
-    print(c.motor.velocidade)
