@@ -18,10 +18,13 @@ class Pessoa:
         return f"{cls} - olhos {cls.olhos}"
 
 
+class Homem(Pessoa):
+    pass
+
 if __name__ == "__main__":
     isabella = Pessoa(nome="Isabella")
-    luiz = Pessoa(nome="Luíz")
-    carlos = Pessoa(isabella, luiz, nome="Carlos", idade=30)
+    luiz = Homem(nome="Luíz")
+    carlos = Homem(isabella, luiz, nome="Carlos", idade=30)
     print(f"{carlos.nome} - {carlos.idade}")
     print(id(carlos))
     for children in carlos.filhos:
