@@ -5,33 +5,41 @@ from os import path
 import sys
 
 project_dir = path.dirname(__file__)
-project_dir = path.join('..')
+project_dir = path.join("..")
 sys.path.append(project_dir)
 
 import unittest
 from unittest.case import TestCase
-from atores import Ator, DESTRUIDO, ATIVO, Obstaculo, Porco, PassaroAmarelo, PassaroVermelho
+from atores import (
+    Ator,
+    DESTRUIDO,
+    ATIVO,
+    Obstaculo,
+    Porco,
+    PassaroAmarelo,
+    PassaroVermelho,
+)
 
 
 class AtorTestes(TestCase):
     def teste_valores_padrao(self):
-        'Testa valores iniciais padrão de um Ator'
+        "Testa valores iniciais padrão de um Ator"
         ator = Ator()
         self.assertEqual(0, ator.x)
         self.assertEqual(0, ator.y)
         self.assertEqual(ATIVO, ator.status)
-        self.assertEqual('A', ator.caracter())
+        self.assertEqual("A", ator.caracter())
 
     def teste_valores_passados_por_parametro(self):
-        'Testa se valores passados no inicializador são armazenados no objeto'
+        "Testa se valores passados no inicializador são armazenados no objeto"
         ator = Ator(1, 2)
         self.assertEqual(1, ator.x)
         self.assertEqual(2, ator.y)
         self.assertEqual(ATIVO, ator.status)
-        self.assertEqual('A', ator.caracter())
+        self.assertEqual("A", ator.caracter())
 
     def teste_ator_posicao(self):
-        'Teste que verifica que o ator comum não deve se mover independente do tempo do jogo'
+        "Teste que verifica que o ator comum não deve se mover independente do tempo do jogo"
         ator = Ator()
         x, y = ator.calcular_posicao(0)
         self.assertEqual(0, x)
@@ -41,7 +49,6 @@ class AtorTestes(TestCase):
         x, y = ator.calcular_posicao(10)
         self.assertEqual(0.3, x)
         self.assertEqual(0.5, y)
-
 
     def teste_colisao_entre_atores_ativos(self):
         """
@@ -67,7 +74,7 @@ class AtorTestes(TestCase):
         self.assert_colisao_atores_ativos(Ator(2, 2), Ator(2, 4), 2)
 
     def teste_nao_colisao_entre_atores_distantes(self):
-        'Teste de que não há colisão entre atores distantes'
+        "Teste de que não há colisão entre atores distantes"
         self.assert_nao_colisao(Ator(2, 2), Ator(2, 4))
         self.assert_nao_colisao(Ator(2, 2), Ator(3, 4))
         self.assert_nao_colisao(Ator(2, 2), Ator(4, 2))
@@ -78,9 +85,11 @@ class AtorTestes(TestCase):
         self.assert_nao_colisao(Ator(2, 2), Ator(0, 4))
 
     def teste_colisao_somente_um_ator_destruido(self):
-        'Teste de que um ator destruído não pode colidir com nenhum outro, mesmo que estejam próximos'
+        "Teste de que um ator destruído não pode colidir com nenhum outro, mesmo que estejam próximos"
         ator = Ator(2, 2)
-        ator.colidir(ator, 0)  # colidindo ator com ele mesmo para alterar seu status para destruido
+        ator.colidir(
+            ator, 0
+        )  # colidindo ator com ele mesmo para alterar seu status para destruido
         ator2 = Ator(2, 2)
         self.assert_nao_colisao(ator, ator2)
         self.assert_nao_colisao(Ator(2, 3), ator)
@@ -102,13 +111,12 @@ class AtorTestes(TestCase):
         self.assert_nao_colisao(Ator(1, 3), ator)
 
     def test_caracter(self):
-        'Teste de caracter para status ATIVO e DESTRUIDO'
+        "Teste de caracter para status ATIVO e DESTRUIDO"
         ator = Ator()
-        self.assertEqual('A', ator.caracter())
+        self.assertEqual("A", ator.caracter())
         outro_ator_na_mesma_posicao = Ator()
         ator.colidir(outro_ator_na_mesma_posicao)
-        self.assertEqual(' ', ator.caracter())
-
+        self.assertEqual(" ", ator.caracter())
 
     def assert_colisao_atores_ativos(self, ator, ator2, intervalo=1):
         """
@@ -117,12 +125,20 @@ class AtorTestes(TestCase):
         Ele serve apenas para encapsular toda lógica de teste de colisão entre dois atores ativos
         """
         # Conferindo status dos dois atores antes da colisão
-        self.assertEqual(ator.status, ATIVO, 'Status deveria ser ativo antes da colisão')
-        self.assertEqual(ator2.status, ATIVO, 'Status deveria ser ativo antes da colisão')
+        self.assertEqual(
+            ator.status, ATIVO, "Status deveria ser ativo antes da colisão"
+        )
+        self.assertEqual(
+            ator2.status, ATIVO, "Status deveria ser ativo antes da colisão"
+        )
         ator.colidir(ator2, intervalo)
         # Conferindo status dos dois atores depois da colisão
-        self.assertEqual(ator2.status, DESTRUIDO, 'Status deveria ser destruido depois da colisão')
-        self.assertEqual(ator.status, DESTRUIDO, 'Status deveria ser destruido depois da colisão')
+        self.assertEqual(
+            ator2.status, DESTRUIDO, "Status deveria ser destruido depois da colisão"
+        )
+        self.assertEqual(
+            ator.status, DESTRUIDO, "Status deveria ser destruido depois da colisão"
+        )
 
     def assert_nao_colisao(self, ator, ator2):
         """
@@ -138,32 +154,38 @@ class AtorTestes(TestCase):
         ator.colidir(ator2)
 
         # Conferindo se status ficaram inalterados
-        self.assertEqual(status_inicial_ator, ator.status, 'Status de ator não deveria mudar')
-        self.assertEqual(status_inicial_ator_2, ator2.status, 'Status de ator2 não deveria mudar')
+        self.assertEqual(
+            status_inicial_ator, ator.status, "Status de ator não deveria mudar"
+        )
+        self.assertEqual(
+            status_inicial_ator_2, ator2.status, "Status de ator2 não deveria mudar"
+        )
 
 
 class ObstaculoTestes(TestCase):
     """
     Esperado '0' como caracter de obstáculo ativo e ' ' como caracter de obstáculo destruído
     """
+
     def teste_status(self):
         obstaculo = Obstaculo()
-        self.assertEqual('O', obstaculo.caracter())
+        self.assertEqual("O", obstaculo.caracter())
         outro_ator_na_mesma_posicao = Ator()
         obstaculo.colidir(outro_ator_na_mesma_posicao)
-        self.assertEqual(' ', obstaculo.caracter())
+        self.assertEqual(" ", obstaculo.caracter())
 
 
 class PorcoTestes(TestCase):
     """
     Esperado '@' como caracter de porco ativo e '+' como caracter de porco destruido
     """
+
     def teste_status(self):
         porco = Porco()
-        self.assertEqual('@', porco.caracter())
+        self.assertEqual("@", porco.caracter())
         outro_ator_na_mesma_posicao = Ator()
         porco.colidir(outro_ator_na_mesma_posicao)
-        self.assertEqual('+', porco.caracter())
+        self.assertEqual("+", porco.caracter())
 
 
 class PassaroBaseTests(TestCase):
@@ -174,7 +196,9 @@ class PassaroBaseTests(TestCase):
 
     """
 
-    def assert_passaro_posicao(self, x_esperado, y_esperado, status_esperado, passaro, tempo):
+    def assert_passaro_posicao(
+        self, x_esperado, y_esperado, status_esperado, passaro, tempo
+    ):
         """
         Método que se testa posição do pássaro.
         Atenção: Esse não é um método de teste porque não se inicia com prefixo "test".
@@ -185,9 +209,17 @@ class PassaroBaseTests(TestCase):
         :param tempo: tempo do jogo
         """
         x_calculado, y_calculado = passaro.calcular_posicao(tempo)
-        self.assertEqual(x_esperado, round(x_calculado), 'valor real de x = %s' % x_calculado)
-        self.assertEqual(y_esperado, round(y_calculado), 'valor real de y = %s' % y_calculado)
-        self.assertEqual(status_esperado, passaro.status, '(x = %s, y = %s)' % (x_calculado, y_calculado))
+        self.assertEqual(
+            x_esperado, round(x_calculado), "valor real de x = %s" % x_calculado
+        )
+        self.assertEqual(
+            y_esperado, round(y_calculado), "valor real de y = %s" % y_calculado
+        )
+        self.assertEqual(
+            status_esperado,
+            passaro.status,
+            "(x = %s, y = %s)" % (x_calculado, y_calculado),
+        )
 
 
 class PassaroVermelhoTests(PassaroBaseTests):
@@ -197,15 +229,13 @@ class PassaroVermelhoTests(PassaroBaseTests):
 
     def teste_status(self):
         passaro_vermelho = PassaroVermelho(1, 1)
-        self.assertEqual('V', passaro_vermelho.caracter())
+        self.assertEqual("V", passaro_vermelho.caracter())
         outro_ator_na_mesma_posicao = Ator()
         passaro_vermelho.colidir(outro_ator_na_mesma_posicao)
-        self.assertEqual('v', passaro_vermelho.caracter())
-
+        self.assertEqual("v", passaro_vermelho.caracter())
 
     def teste_velocidade_escalar(self):
         self.assertEqual(20, PassaroVermelho.velocidade_escalar)
-
 
     def teste_foi_lancado(self):
         """
@@ -214,11 +244,15 @@ class PassaroVermelhoTests(PassaroBaseTests):
         :return:
         """
         passaro_vermelho = PassaroVermelho(1, 1)
-        self.assertFalse(passaro_vermelho.foi_lancado(),
-                         'Se o método lançar ainda não foi executado, deve retornar falso')
+        self.assertFalse(
+            passaro_vermelho.foi_lancado(),
+            "Se o método lançar ainda não foi executado, deve retornar falso",
+        )
         passaro_vermelho.lancar(0, 0)
-        self.assertTrue(passaro_vermelho.foi_lancado(),
-                        'Se o método lançar foi executado, deve retornar verdadeiro')
+        self.assertTrue(
+            passaro_vermelho.foi_lancado(),
+            "Se o método lançar foi executado, deve retornar verdadeiro",
+        )
 
     def teste_colisao_com_chao(self):
         """
@@ -227,19 +261,29 @@ class PassaroVermelhoTests(PassaroBaseTests):
         """
         passaro = PassaroVermelho(0, 0)
         passaro.colidir_com_chao()
-        self.assertEqual(DESTRUIDO, passaro.status, 'Deve colidir com chão sempre que y<=0')
+        self.assertEqual(
+            DESTRUIDO, passaro.status, "Deve colidir com chão sempre que y<=0"
+        )
         passaro = PassaroVermelho(1, 0)
         passaro.colidir_com_chao()
-        self.assertEqual(DESTRUIDO, passaro.status, 'Deve colidir com chão sempre que y<=0')
+        self.assertEqual(
+            DESTRUIDO, passaro.status, "Deve colidir com chão sempre que y<=0"
+        )
         passaro = PassaroVermelho(2, 0)
         passaro.colidir_com_chao()
-        self.assertEqual(DESTRUIDO, passaro.status, 'Deve colidir com chão sempre que y<=0')
+        self.assertEqual(
+            DESTRUIDO, passaro.status, "Deve colidir com chão sempre que y<=0"
+        )
         passaro = PassaroVermelho(2, -0.1)
         passaro.colidir_com_chao()
-        self.assertEqual(DESTRUIDO, passaro.status, 'Deve colidir com chão sempre que y<=0')
+        self.assertEqual(
+            DESTRUIDO, passaro.status, "Deve colidir com chão sempre que y<=0"
+        )
         passaro = PassaroVermelho(2, -5)
         passaro.colidir_com_chao()
-        self.assertEqual(DESTRUIDO, passaro.status, 'Deve colidir com chão sempre que y<=0')
+        self.assertEqual(
+            DESTRUIDO, passaro.status, "Deve colidir com chão sempre que y<=0"
+        )
 
 
 class PassaroAmareloTests(PassaroBaseTests):
@@ -249,10 +293,10 @@ class PassaroAmareloTests(PassaroBaseTests):
 
     def teste_status(self):
         passaro_amarelo = PassaroAmarelo(1, 1)
-        self.assertEqual('A', passaro_amarelo.caracter())
+        self.assertEqual("A", passaro_amarelo.caracter())
         outro_ator_na_mesma_posicao = Ator()
         passaro_amarelo.colidir(outro_ator_na_mesma_posicao)
-        self.assertEqual('a', passaro_amarelo.caracter())
+        self.assertEqual("a", passaro_amarelo.caracter())
 
     def teste_velocidade_escalar(self):
         self.assertEqual(30, PassaroAmarelo.velocidade_escalar)
@@ -264,8 +308,6 @@ class PassaroAmareloTests(PassaroBaseTests):
         """
         passaro_amarelo = PassaroAmarelo(1, 1)
         passaro_amarelo.lancar(90, 2)  # passaro lancado a 90 graus no tempo 2 segundos
-
-
 
         # subindo
 
@@ -759,6 +801,6 @@ class PassaroAmareloTests(PassaroBaseTests):
         self.assert_passaro_posicao(1, y, ATIVO, passaro, tempo)
 
 
-if __name__=='__main__':
-    teste= AtorTestes()
+if __name__ == "__main__":
+    teste = AtorTestes()
     teste.teste_colisao_entre_atores_ativos()
