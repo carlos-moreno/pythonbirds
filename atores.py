@@ -79,7 +79,7 @@ class Passaro(Ator):
     velocidade_escalar = 10
 
     def __init__(self, x=0, y=0):
-        """
+        """´
         Método de inicialização de pássaro.
 
         Deve chamar a inicialização de ator. Além disso, deve armazenar a posição inicial e incializar o tempo de
@@ -143,4 +143,6 @@ class PassaroAmarelo(Passaro):
 
 
 class PassaroVermelho(Passaro):
+    velocidade_escalar = 20
     _caracter_ativo = "V"
+    _caracter_destruido = "v"
